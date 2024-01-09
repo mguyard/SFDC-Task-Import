@@ -99,10 +99,13 @@ class EventEntry:
         self.duration_hours = self.calculate_duration_hours()
         self.subject = self.category_matches_subject_list()
         self.companies = self.category_matches_company()
+        self.opportunities = self.category_matches_opportunities()
 
-        logging.debug("%s - %s - %s - %s hours - %s - %s",
+        logging.debug("%s - %s - %s - %s hours - %s - %d companies (%s) and %d opportunities",
                       self.start,self.end, self.summary,
-                      self.duration_hours, self.subject, self.companies)
+                      self.duration_hours, self.subject, len(self.companies),
+                      '; '.join([str(company['name']) for company in self.companies]),
+                      len(self.opportunities))
 
     def calculate_duration_hours(self):
         """
@@ -157,6 +160,23 @@ class EventEntry:
                     company = {"id": parts[2], "name": parts[1]}
                     companies.append(company)
         return companies
+
+    def category_matches_opportunities(self):
+        """
+        Returns a list of opportunities that match the categories.
+        
+        Returns:
+            list: A list of dictionaries representing the opportunities. Each dictionary
+            contains the 'id' and 'name' of the opportunity.
+        """
+        opportunities = []
+        for category in self.categories if self.categories is not None else []:
+            if category.startswith("OP::"):
+                parts = category.split("::")
+                if len(parts) >= 3:
+                    opportunity = {"id": parts[2], "name": parts[1]}
+                    opportunities.append(opportunity)
+        return opportunities
 
 def fetch_data():
     """
@@ -247,17 +267,26 @@ def write_events_to_csv(events, filename):
             'Comments'])
         for event in events:
             companies = '; '.join([str(company['id']) for company in event.companies])
+            opportunities = '; '.join([str(opportunity['id']) for opportunity in event.opportunities])
             comments = []
+            comments.append(f'Event Summary: {event.summary}')
+            if not companies and not opportunities:
+                comments.append('No companies or opportunities are defined. Please verify if it is needed for this subject.')
+                task_related_to = ''
+            else:
+                task_related_to = opportunities if opportunities else companies
             if len(event.companies) > 1:
-                comments.append('Multiple companies are defined. You need to choose one.')
+                comments.append('Multiple companies are defined. You need to choose one manually.')
+            if len(event.opportunities) > 1:
+                comments.append('Multiple opportunities are defined. You need to choose one manually.')
             writer.writerow([
                 MY_SFDC_ID,
                 event.start.date(),
-                companies,
+                task_related_to,
                 'Completed',
                 event.subject,
                 event.duration_hours,
-                ' / '.join(comments)])
+                ' // '.join(comments)])
 
 def main():
     """
