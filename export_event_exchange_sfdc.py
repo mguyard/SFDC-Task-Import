@@ -1,18 +1,30 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+Module to export events from Exchange to CSV file able to be imported to Salesforce.
+
+Author: GUYARD Marc - mguyard@fortinet.com
+Version: 0.1
+"""
+
 import argparse
+import logging
 from datetime import datetime, timedelta
 import math
+import csv
 import requests
 from dateutil.tz import tzlocal
 
-DEBUG=True
 JCALAPI_URL="http://localhost:7042/events"
 MAX_HOURS_BY_DAY=10
 MY_SFDC_ID="0052H00000BxQ9GQAV"
+MORNING_HOUR=8
+EVENING_HOUR=22
 
 class Attendee:
+    """Class representing a Attendee"""
+
     def __init__(self, name, email, optional):
         """
         Initializes an Attendee object.
@@ -27,6 +39,7 @@ class Attendee:
         self.optional = optional
 
 class EventEntry:
+    """Class representing an event entry"""
 
     SUBJECT_LIST = [
         "BACK OFFICE TASKS",
@@ -87,6 +100,10 @@ class EventEntry:
         self.subject = self.category_matches_subject_list()
         self.companies = self.category_matches_company()
 
+        logging.debug("%s - %s - %s - %s hours - %s - %s",
+                      self.start,self.end, self.summary,
+                      self.duration_hours, self.subject, self.companies)
+
     def calculate_duration_hours(self):
         """
         Calculates the duration in hours between the start and end time.
@@ -95,10 +112,19 @@ class EventEntry:
             int: The rounded duration in hours, or None if either the start or end time is missing.
         """
         if self.start is not None and self.end is not None:
-            duration = self.end - self.start
-            duration_hours = duration.total_seconds() / 3600
-            rounded_hours = math.ceil(duration_hours)
-            return rounded_hours if rounded_hours <= MAX_HOURS_BY_DAY else MAX_HOURS_BY_DAY
+            start = max(self.start, self.start.replace(hour=MORNING_HOUR, minute=0))
+            end = min(self.end, self.end.replace(hour=EVENING_HOUR, minute=0))
+
+            if start >= end:
+                return 0
+
+            total_hours = 0
+            while start.date() <= end.date():
+                day_end = min(end, start.replace(hour=EVENING_HOUR, minute=0))
+                hours_this_day = (day_end - start).seconds / 3600
+                total_hours += min(hours_this_day, MAX_HOURS_BY_DAY)
+                start = (start + timedelta(days=1)).replace(hour=MORNING_HOUR, minute=0)
+            return math.ceil(total_hours)
         else:
             return None
 
@@ -140,12 +166,13 @@ def fetch_data():
         dict: The fetched data as a JSON dictionary.
         None: If the request fails or the response status code is not 200.
     """
-    response = requests.get(JCALAPI_URL, timeout=15, verify=False)
-    if response.status_code == 200:
+    try:
+        response = requests.get(JCALAPI_URL, timeout=15, verify=False)
+        response.raise_for_status()  # Raise an exception for non-200 status codes
         json_data = response.json()
         return json_data
-    else:
-        print(f"Failed to retrieve JSON from {JCALAPI_URL}. Status code: {response.status_code}")
+    except requests.exceptions.RequestException as e:
+        logging.error("Failed to retrieve JSON from %s: %s", JCALAPI_URL, str(e))
         return None
 
 def validate_events_timing(events, start_date, end_date):
@@ -160,20 +187,100 @@ def validate_events_timing(events, start_date, end_date):
     Returns:
         list: A list of valid events that fall within the specified date range.
     """
+    logging.info("Validating if events are within the date range %s - %s", start_date, end_date)
     valid_events = []
     for event in events:
         event_start = datetime.fromisoformat(event['start'])
         event_end = datetime.fromisoformat(event['end'])
         if start_date <= event_start <= end_date and start_date <= event_end <= end_date:
             valid_events.append(event)
-            if DEBUG:
-                print(f"INCLUDED - Event {event['summary']} at {event['start']} is within the date range")
+            logging.debug("INCLUDED - Event %s at %s is within the date range",
+                          event['summary'], event['start'])
         else:
-            if DEBUG:
-                print(f"EXCLUDED - Event {event['summary']} at {event['start']} is NOT within the date range")
+            logging.debug("EXCLUDED - Event %s at %s is NOT within the date range",
+                          event['summary'], event['start'])
     return valid_events
 
+def filter_events(events):
+    """
+    Filters a list of events based on certain criteria.
+
+    Args:
+        events (list): The list of events to be filtered.
+
+    Returns:
+        list: The filtered list of events.
+    """
+    filtered_events = []
+    logging.info("Filtering events based on duration > 0 and subject is defined")
+    for event in events:
+        if event.duration_hours > 0 and event.subject:
+            logging.debug("INCLUDED - Event %s at %s match the criteria",event.summary, event.start)
+            filtered_events.append(event)
+        else:
+            logging.debug("EXCLUDED - Event %s at %s does not match the criteria",
+                          event.summary, event.start)
+    logging.info("%d events are valid (matching duration > 0 and subject is defined) on %d events",
+                 len(filtered_events), len(events))
+    return filtered_events
+
+def write_events_to_csv(events, filename):
+    """
+    Write events to a CSV file.
+
+    Args:
+        events (list): List of events to write.
+        filename (str): Name of the CSV file.
+
+    Returns:
+        None
+    """
+    with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow([
+            'OwnerId',
+            'ActivityDate',
+            'WhatId',
+            'Status',
+            'Subject',
+            'Time_Spent_hrs__c',
+            'Comments'])
+        for event in events:
+            companies = '; '.join([str(company['id']) for company in event.companies])
+            comments = []
+            if len(event.companies) > 1:
+                comments.append('Multiple companies are defined. You need to choose one.')
+            writer.writerow([
+                MY_SFDC_ID,
+                event.start.date(),
+                companies,
+                'Completed',
+                event.subject,
+                event.duration_hours,
+                ' / '.join(comments)])
+
 def main():
+    """
+    Main function that exports events from Exchange to a CSV file
+    that can be imported to Salesforce.
+
+    The function accepts command line arguments to specify the date range
+    of events to export. If no arguments are provided, it exports events
+    from the current week.
+
+    Command line arguments:
+    --last-week: Export events from last week.
+    --last-month: Export events from last month.
+    --start: Start date in format YYYY-MM-DD.
+    --end: End date in format YYYY-MM-DD.
+    -a, --export-all: Export all events from Exchange including events without SFDC Task subject.
+    -o, --output: Output CSV file name and path.
+    --verbose, -v: Verbose mode.
+
+    Returns:
+    None
+    """
+
     def last_week():
         today = datetime.now(tz=tzlocal()).replace(hour=0, minute=0, second=0, microsecond=0)
         start = today - timedelta(days=today.weekday(), weeks=1)
@@ -216,9 +323,18 @@ def main():
         )
     parser.add_argument('--start', type=str, help="Start date in format YYYY-MM-DD.")
     parser.add_argument('--end', type=str, help="End date in format YYYY-MM-DD.")
-    parser.add_argument('-a', '--export-all', action='store_true', help="Export all events from Exchange including events without SFDC Task subject.")
+    parser.add_argument('-a', '--export-all',action='store_true',
+                        help="Export all events from Exchange including events without SFDC Task subject.")
+    parser.add_argument('-o', '--output', type=str, default='sfdc_task.csv',
+                        help="Output CSV file name and path.")
+    parser.add_argument('--verbose', '-v', action='store_true', default=False, help="Verbose mode")
 
     args = parser.parse_args()
+
+    if args.verbose:
+        logging.basicConfig(level=logging.DEBUG, style='{', format='{levelname:8} {message}')
+    else:
+        logging.basicConfig(level=logging.INFO, style='{', format='{levelname:8} {message}')
 
     if args.last_week:
         start_date, end_date = last_week()
@@ -237,17 +353,18 @@ def main():
     else:
         start_date, end_date = current_week()
 
-    print(f"Start date: {start_date}, End date: {end_date}")
+    logging.info("Start date: %s, End date: %s", start_date, end_date)
     events = fetch_data()
     if events is not None:
         valid_events = validate_events_timing(events, start_date, end_date)
         if valid_events:
-            print(f"{len(valid_events)} events are within the date range")
+            logging.info("%d events are within the date range on %d events collected",
+                         len(valid_events), len(events))
             matching_events = [EventEntry(**event) for event in valid_events]
-            for event in matching_events:
-                print(f"{event.start} - {event.end} - {event.summary} - {event.duration_hours} hours - {event.subject} - {event.companies}")
+            filtered_events = filter_events(matching_events) if not args.export_all else matching_events
+            write_events_to_csv(filtered_events, args.output)
         else:
-            print("No events are within the date range")
+            logging.info("No events are within the date range")
 
 if __name__ == "__main__":
     main()
