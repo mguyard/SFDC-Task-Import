@@ -41,7 +41,6 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            docker.io/${{ env.image_name }}
             ghcr.io/${{ env.image_name }}
           tags: |
             # set latest tag for default branch
