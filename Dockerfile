@@ -5,6 +5,6 @@ WORKDIR /usr/src/app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY export_event_exchange_sfdc.py .
+COPY import-sfdc-task.py .
 
 ENTRYPOINT [ "python", "./import-sfdc-task.py" ]
