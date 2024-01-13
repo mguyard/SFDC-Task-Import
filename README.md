@@ -110,6 +110,7 @@ docker create \
 -e "EXCHANGE_EMAIL=<MyExchageEmailHere>" \
 -e "EXCHANGE_USERNAME=<MyExchageUsernameHere>" \
 -e "EXCHANGE_PASSWORD=<MyExchangePasswordHere>" \
+-e "TZ=Europe/Paris" \
 pschmitt/jcalapi:latest
 docker start ExchangeAPI
 ```
@@ -123,12 +124,31 @@ docker create \
 -e "EXCHANGE_EMAIL=<MyExchageEmailHere>" \
 -e "EXCHANGE_USERNAME=<MyExchageUsernameHere>" \
 -e "EXCHANGE_PASSWORD=<MyExchangePasswordHere>" \
--e "PAST_DAYS_IMPORT=15"
+-e "PAST_DAYS_IMPORT=15" \
+-e "TZ=Europe/Paris" \
 pschmitt/jcalapi:latest
 docker start ExchangeAPI
 ```
 
 The main functionality of this script is encapsulated within a Docker container, providing a self-contained and reproducible environment. When you are ready to export events, you will launch this Docker container to execute the script.
+
+### 🔎 Verifying ExchangeAPI container
+
+ExchangeAPI container need few seconds to start and collect all events.
+To verify if all is working, please execute this command :
+
+```sh
+docker container logs ExchangeAPIDev
+``````
+
+Some logs like these confirm if this working :
+
+> Found naive datetime 2023-10-16 13:36:54 on field last_modified_time
+
+> [!IMPORTANT]
+>
+> If you have some issues, you can enable debugs during container creation by adding __-e "DEBUG=True"__
+
 
 ### 🤖 Running SFDC-Task-Import
 
