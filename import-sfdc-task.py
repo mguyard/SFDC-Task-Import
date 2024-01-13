@@ -17,12 +17,6 @@ import csv
 import requests
 from dateutil.tz import tzlocal
 
-# Voir pour ajouter ces paramètres en arguments
-MAX_HOURS_BY_DAY = 10
-MY_SFDC_ID = "0052H00000BxQ9GQAV"
-MORNING_HOUR = 8
-EVENING_HOUR = 22
-
 
 class Attendee:
     """Class representing a Attendee"""
@@ -61,6 +55,9 @@ class EventEntry:
 
     def __init__(
         self,
+        max_hours_by_day,
+        morning_hour,
+        evening_hour,
         uid,
         backend,
         calendar,
@@ -83,6 +80,7 @@ class EventEntry:
         Initializes an instance of the Event class.
 
         Args:
+            max_hours_by_day (int): The maximum number of hours allowed per day.
             uid (str): The unique identifier of the event.
             backend (str): The backend used for the event.
             calendar (str): The calendar associated with the event.
@@ -119,7 +117,9 @@ class EventEntry:
         self.categories = categories
         self.extra = extra
         self.conference_url = conference_url
-        self.duration_hours = self.calculate_duration_hours()
+        self.duration_hours = self.calculate_duration_hours(
+            max_hours_by_day, morning_hour, evening_hour
+        )
         self.subject = self.category_matches_subject_list()
         self.companies = self.category_matches_company()
         self.opportunities = self.category_matches_opportunities()
@@ -136,7 +136,7 @@ class EventEntry:
             len(self.opportunities),
         )
 
-    def calculate_duration_hours(self):
+    def calculate_duration_hours(self, max_hours_by_day, morning_hour, evening_hour):
         """
         Calculates the duration in hours between the start and end time.
 
@@ -145,18 +145,22 @@ class EventEntry:
                  time is missing.
         """
         if self.start is not None and self.end is not None:
-            start = max(self.start, self.start.replace(hour=MORNING_HOUR, minute=0))
-            end = min(self.end, self.end.replace(hour=EVENING_HOUR, minute=0))
+            start = max(self.start, self.start.replace(hour=morning_hour, minute=0))
+            end = min(self.end, self.end.replace(hour=evening_hour, minute=0))
+            logging.debug(f"Event {self.summary} start: {start} / end: {end}")
 
             if start >= end:
                 return 0
 
             total_hours = 0
             while start.date() <= end.date():
-                day_end = min(end, start.replace(hour=EVENING_HOUR, minute=0))
+                day_end = min(end, start.replace(hour=evening_hour, minute=0))
                 hours_this_day = (day_end - start).seconds / 3600
-                total_hours += min(hours_this_day, MAX_HOURS_BY_DAY)
-                start = (start + timedelta(days=1)).replace(hour=MORNING_HOUR, minute=0)
+                total_hours += min(hours_this_day, max_hours_by_day)
+                start = (start + timedelta(days=1)).replace(hour=morning_hour, minute=0)
+                logging.debug(
+                    f"Event {self.summary} for day {start.date()} with counting {total_hours} hours"  # noqa: E501
+                )
             return math.ceil(total_hours)
         else:
             return None
@@ -300,13 +304,15 @@ def filter_events(events):
     return filtered_events
 
 
-def write_events_to_csv(events, filename):
+def write_events_to_csv(sfdc_user_id, events, filename, max_hours_by_day):
     """
     Write events to a CSV file.
 
     Args:
+        sfdc_user_id (str): The Salesforce user ID.
         events (list): List of events to write.
         filename (str): Name of the CSV file.
+        max_hours_by_day (int): Maximum number of hours allowed per day.
 
     Returns:
         None
@@ -346,9 +352,13 @@ def write_events_to_csv(events, filename):
                 comments.append(
                     "Multiple opportunities are defined. You need to choose one manually."  # noqa: E501
                 )
+            if event.duration_hours > max_hours_by_day:
+                comments.append(
+                    f"Duration is greater than {max_hours_by_day} hours. Probably a multi-day event."  # noqa: E501
+                )
             writer.writerow(
                 [
-                    MY_SFDC_ID,
+                    sfdc_user_id,
                     event.start.date(),
                     task_related_to,
                     "Completed",
@@ -357,29 +367,44 @@ def write_events_to_csv(events, filename):
                     " // ".join(comments),
                 ]
             )
+        logging.info(f"{len(events)} events exported to {filename}")
 
 
 def main():
     """
     Main function that exports events from Exchange to a CSV file
-    that can be imported to Salesforce.
+    that can be imported into Salesforce.
 
-    The function accepts command line arguments to specify the date range
-    of events to export. If no arguments are provided, it exports events
-    from the current week.
+    The function takes command line arguments to specify the API URL,
+    Salesforce user ID, date range, export options, output file name,
+    and other parameters.
 
-    Command line arguments:
-    --last-week: Export events from last week.
-    --last-month: Export events from last month.
-    --start: Start date in format YYYY-MM-DD.
-    --end: End date in format YYYY-MM-DD.
-    -a, --export-all: Export all events from Exchange including events
-                      without SFDC Task subject.
-    -o, --output: Output CSV file name and path.
-    --verbose, -v: Verbose mode.
+    The function retrieves events from the Exchange API, validates
+    their timing against the specified date range, filters the events
+    based on certain criteria, and writes the filtered events to a CSV
+    file in a format suitable for Salesforce import.
 
-    Returns:
-    None
+    Usage:
+    python import-sfdc-task.py [--api-url API_URL] [--sfdc-user-id USER_ID]
+                              [--last-week] [--last-month] [--start START_DATE]
+                              [--end END_DATE] [--export-all] [--output OUTPUT_FILE]
+                              [--max-hours-by-day MAX_HOURS] [--morning-hour START_HOUR]
+                              [--evening-hour END_HOUR] [--verbose]
+
+    Arguments:
+    --api-url, -u: URL of the JCALAPI (default: http://localhost:7042)
+    --sfdc-user-id, -i: Salesforce ID of the user (required)
+    --last-week: Export events from last week (takes precedence over --start and --end)
+    --last-month: Export events from last month (takes precedence over --start and --end)
+    --start: Start date in format YYYY-MM-DD
+    --end: End date in format YYYY-MM-DD
+    --export-all, -a: Export all events from Exchange including events without SFDC Task subject
+    --output, -o: Output CSV file name and path (default: sfdc_task.csv)
+    --max-hours-by-day: Max hours by day (default: 10)
+    --morning-hour: Start hour of day used in duration calculation (default: 8)
+    --evening-hour: End hour of day used in duration calculation (default: 22)
+    --verbose, -v: Verbose mode
+
     """
 
     def last_week():
@@ -417,12 +442,21 @@ def main():
         prog="export_event_exchange_sfdc",
         description="Export events from Exchange to CSV file able to be imported to Salesforce.",  # noqa: E501
         epilog="Without parameters, the script will export events from current week.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument(
+        "-u",
         "--api-url",
         type=str,
         default="http://localhost:7042",
         help="URL of the JCALAPI",
+    )
+    parser.add_argument(
+        "-i",
+        "--sfdc-user-id",
+        type=str,
+        required=True,
+        help="Salesforce ID of the user",
     )
     parser.add_argument(
         "--last-week",
@@ -448,6 +482,21 @@ def main():
         type=str,
         default="sfdc_task.csv",
         help="Output CSV file name and path.",
+    )
+    parser.add_argument(
+        "--max-hours-by-day", type=int, default=10, help="Max hours by day"
+    )
+    parser.add_argument(
+        "--morning-hour",
+        type=int,
+        default=8,
+        help="Start hour of day used in duration calculation",
+    )
+    parser.add_argument(
+        "--evening-hour",
+        type=int,
+        default=22,
+        help="End hour of day used in duration calculation",
     )
     parser.add_argument(
         "--verbose", "-v", action="store_true", default=False, help="Verbose mode"
@@ -497,13 +546,20 @@ def main():
                 len(valid_events),
                 len(events),
             )
-            matching_events = [EventEntry(**event) for event in valid_events]
+            matching_events = [
+                EventEntry(
+                    args.max_hours_by_day, args.morning_hour, args.evening_hour, **event
+                )
+                for event in valid_events
+            ]
             filtered_events = (
                 filter_events(matching_events)
                 if not args.export_all
                 else matching_events
             )
-            write_events_to_csv(filtered_events, args.output)
+            write_events_to_csv(
+                args.sfdc_user_id, filtered_events, args.output, args.max_hours_by_day
+            )
         else:
             logging.info("No events are within the date range")
 
