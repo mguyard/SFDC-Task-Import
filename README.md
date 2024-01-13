@@ -38,7 +38,7 @@
 >   - [🤖 Running SFDC-Task-Import](#-running-SFDC-Task-Import)
 >   - [🧩 Parameters](#-parameters)
 >   - [🔝 Upgrade Container](#-upgrade-container)
-> - [⤵ Import CSV to Salesforce](#⤵-import-csv-to-salesforce)
+> - [⤵ Import CSV to Salesforce](#-import-csv-to-salesforce)
 > - [🤝 Contributing](#-contributing)
 > - [📄 License](#-license)
 
