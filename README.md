@@ -158,6 +158,14 @@ ghcr.io/mguyard/import-sfdc-task:latest \
 | `--verbose`/`-v`           | -                 | Mode verbeux (affiche des informations détaillées pendant l'exécution)                             | Flag    | Optionnel    |
 
 
+### 🔝 Upgrade Container
+
+To upgrade, before [running script](#-running-SFDC-Task-Import), please remove old container image
+
+```sh
+docker rmi ghcr.io/mguyard/import-sfdc-task:latest
+```
+
 ---
 
 ## 🤝 Contributing
