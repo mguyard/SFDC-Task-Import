@@ -38,6 +38,7 @@
 >   - [🤖 Running SFDC-Task-Import](#-running-SFDC-Task-Import)
 >   - [🧩 Parameters](#-parameters)
 >   - [🔝 Upgrade Container](#-upgrade-container)
+> - [⤵ Import CSV to Salesforce](#⤵-import-csv-to-salesforce)
 > - [🤝 Contributing](#-contributing)
 > - [📄 License](#-license)
 
@@ -178,6 +179,34 @@ docker rmi ghcr.io/mguyard/import-sfdc-task:latest
 ```
 
 ---
+
+## ⤵ Import CSV to Salesforce
+
+To seamlessly import the generated CSV file into Salesforce, we recommend utilizing [dataloader.io](https://dataloader.io/), a data integration service endorsed by Salesforce. This tool provides a user-friendly interface for efficiently importing data into your Salesforce organization.
+
+1. **Access DataLoader.io:** Visit [dataloader.io](https://dataloader.io/) using your preferred web browser.
+
+2. **Login with Company Account:**
+    - Log in to DataLoader.io using the Salesforce credentials associated with your company's account.
+    - Ensure that you use the Salesforce account credentials that have the necessary permissions for data import.
+
+3. **Specify Salesforce Domain and Environment:**
+    - If your Salesforce organization utilizes a custom domain, enter it during the login process.
+    - Choose the appropriate environment, such as "Production," to ensure the data is imported into the correct Salesforce instance.
+
+4. **Create a new task:**
+    - In DataLoader.io, navigate to the "NEW TASK" section and select "IMPORT".
+
+5. **Initiate CSV Upload and Mapping:**
+    - Choose "Insert" as Operation and "Task" as Object
+    - Upload CSV file
+    - Ensure that the mapping aligns with Salesforce object fields to guarantee accurate data import (only comment isn't mapped - it's only for CSV review).
+
+6. **Run the Data Import Job:**
+    - Click on "Save & Run" button, monitoring the progress and addressing any potential errors or warnings.
+
+> For future data uploads, you can streamline the process by editing the existing DataLoader.io task, eliminating the need to recreate it from scratch.
+
 
 ## 🤝 Contributing
 
