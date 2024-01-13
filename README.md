@@ -39,6 +39,7 @@
 >   - [🤖 Running SFDC-Task-Import](#-running-SFDC-Task-Import)
 >   - [🧩 Parameters](#-parameters)
 >   - [🔝 Upgrade Container](#-upgrade-container)
+> - [🗂️ How to classify events](#how-to-classify-events)
 > - [⤵ Import CSV to Salesforce](#-import-csv-to-salesforce)
 > - [🤝 Contributing](#-contributing)
 > - [📄 License](#-license)
@@ -198,6 +199,48 @@ To upgrade, before [running script](#-running-SFDC-Task-Import), please remove o
 ```sh
 docker rmi ghcr.io/mguyard/import-sfdc-task:latest
 ```
+
+---
+
+## 🗂️ How to classify events
+
+To ensure accurate and effective classification of events by the script, it is recommended to utilize Outlook categories when creating or updating events in your calendar. The script employs three types of classifications, with a specific focus on categorizing events based on their subject. There are predefined subject-based categories known to the script:
+
+- **BACK OFFICE TASKS**
+- **COMPANY/TEAM MEETINGS**
+- **HighspotActivity**
+- **LEARNING ACTIVITY**
+- **OTHER PRE SALES (OPPORTUNITY RELATED)**
+- **PARTNER ENGAGEMENT**
+- **PIPELINE GENERATION ACTIVITY**
+- **POST SALES ASSISTANCE**
+- **PRE SALES ONSITE**
+- **SME SUPPORT**
+- **TRAVEL**
+- **VACATION**
+
+Optionally, you can enhance event classification by including custiomer or opportunity information using the following formats:
+
+- **Customer Classification:** `CU::<CustomerName>::<SalesforceCustomerID>`
+- **Opportunity Classification:** `OP::<OpportunityName>::<SalesforceOpportunityID>`
+
+### Create Categories
+
+You need to create all subject-based categories and useful customer or opportunity ID in outlook.
+
+### How to Assign Categories:
+
+1. **Open the Event in Outlook:**
+   - Locate and open the event you want to classify within your Outlook calendar.
+
+2. **Assign Categories:**
+   - Navigate to the category section and assign one or more categories based on the desired classifications.
+
+3. **Save Changes:**
+   - Close event to ensure the assigned categories are associated with the event.
+
+By adopting these classifications, you provide the script with valuable context, enabling more granular tracking of events based on subjects, clients, and opportunities.
+
 
 ---
 
