@@ -39,7 +39,7 @@
 >   - [🤖 Running SFDC-Task-Import](#-running-SFDC-Task-Import)
 >   - [🧩 Parameters](#-parameters)
 >   - [🔝 Upgrade Container](#-upgrade-container)
-> - [🏷️ How to tag events](#-how-to-tag-events)
+> - [🏷️ How to tag events](#%EF%B8%8F-how-to-tag-events)
 > - [⤵ Import CSV to Salesforce](#-import-csv-to-salesforce)
 > - [🤝 Contributing](#-contributing)
 > - [📄 License](#-license)
