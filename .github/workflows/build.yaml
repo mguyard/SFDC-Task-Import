@@ -50,7 +50,7 @@ jobs:
           tags: |
             type=semver,pattern={{major}}.{{minor}},enable=${{ github.event_name == 'release' }}
             type=raw,value=latest,enable=${{ github.event_name == 'release' }}
-            type=raw,value=dev,enable=${{ is_default_branch && github.event_name != 'release' }}
+            type=ref,event=branch,enable=true
 
       - name: Build and export to Docker
         uses: docker/build-push-action@v5
