@@ -3,6 +3,9 @@ name: container-build
 on:
   workflow_dispatch:
   push:
+    paths:
+      - 'Dockerfile'
+      - 'import-sfdc-task.py'
     branches:
       - 'main'
 
