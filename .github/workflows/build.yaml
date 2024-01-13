@@ -1,4 +1,5 @@
 name: container-build
+run-name: Build Container
 
 on:
   workflow_dispatch:

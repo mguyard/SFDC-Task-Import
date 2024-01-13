@@ -1,4 +1,5 @@
 name: Python Lint
+run-name: Python Lint
 
 on: [push, pull_request]
 
