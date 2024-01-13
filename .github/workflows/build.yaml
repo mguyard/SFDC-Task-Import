@@ -1,4 +1,4 @@
-name: container-build
+name: Build Container
 run-name: Build Container
 
 on:
