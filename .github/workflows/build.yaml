@@ -49,8 +49,7 @@ jobs:
             ${{ env.registry }}/${{ env.image_name }}
           tags: |
             type=semver,pattern={{major}}.{{minor}},enable=${{ github.event_name == 'release' }}
-            type=raw,value=latest,enable=${{ github.event_name == 'release' }}
-            type=raw,value=dev-{{branch}}-{{sha}}
+            type=raw,value=dev-{{branch}}-{{sha}},enable=${{ github.event_name != 'release' }}
 
       - name: Build and export to Docker
         uses: docker/build-push-action@v5
