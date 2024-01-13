@@ -55,7 +55,7 @@ jobs:
 
       - name: Test
         run: |
-          docker run --rm ${{ env.image_name }}:latest
+          docker run --rm ${{ env.registry }}/${{ env.image_name }}:latest --help
 
       - name: Build and push
         uses: docker/build-push-action@v5
