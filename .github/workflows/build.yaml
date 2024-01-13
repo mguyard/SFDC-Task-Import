@@ -48,8 +48,9 @@ jobs:
           images: |
             ${{ env.registry }}/${{ env.image_name }}
           tags: |
-            # set latest tag for default branch
-            type=raw,value=latest,enable={{is_default_branch}}
+            type=ref,event=release
+            type=raw,value=nightly,enable=${{ github.event_name != 'release' }}
+            type=raw,value=latest,enable=${{ github.event_name == 'release' }}
 
       - name: Build and export to Docker
         uses: docker/build-push-action@v5
