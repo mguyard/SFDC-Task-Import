@@ -8,6 +8,8 @@ on:
       - 'import-sfdc-task.py'
     branches:
       - 'main'
+  release:
+    types: [published]
 
 jobs:
   docker-buildx:
