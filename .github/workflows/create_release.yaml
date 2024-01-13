@@ -1,9 +1,10 @@
 name: Create Release
+run-name: Create Release on tag creation
 
 on:
   push:
     tags:
-      - '*'
+      - 'v*.*.*'
 
 jobs:
   build:
@@ -21,11 +22,12 @@ jobs:
           export CURRENT_TAG=$(git describe --tags --abbrev=0)
           echo "PREVIOUS_TAG=$PREVIOUS_TAG"
           echo "CURRENT_TAG=$CURRENT_TAG"
+          echo "TAG_MESSAGE=$(git tag -l -n1 $CURRENT_TAG)"
           if [ -z "$PREVIOUS_TAG" ]
           then
-            echo "CHANGELOG=$(git log --pretty=format:"- %s" --root -- import-sfdc-task.py Dockerfile)" > changelog.txt
+            echo "CHANGELOG=$TAG_MESSAGE\n\n\n$(git log --pretty=format:"- %s" --root -- import-sfdc-task.py Dockerfile)" > changelog.txt
           else
-            echo "CHANGELOG=$(git log --pretty=format:"- %s" $PREVIOUS_TAG..$CURRENT_TAG -- import-sfdc-task.py Dockerfile)" > changelog.txt
+            echo "CHANGELOG=$TAG_MESSAGE\n\n\n$(git log --pretty=format:"- %s" $PREVIOUS_TAG..$CURRENT_TAG -- import-sfdc-task.py Dockerfile)" > changelog.txt
           fi
           echo ::set-output name=changelog::$(cat changelog.txt)
 
