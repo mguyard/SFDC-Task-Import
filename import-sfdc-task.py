@@ -6,7 +6,6 @@ Module to export events from Exchange to CSV file able to be
 imported to Salesforce.
 
 Author: GUYARD Marc - mguyard@fortinet.com
-Version: 0.1
 """
 
 import argparse
