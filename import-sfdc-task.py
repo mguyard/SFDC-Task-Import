@@ -20,7 +20,7 @@ from dateutil.tz import tzlocal
 class Attendee:
     """Class representing a Attendee"""
 
-    def __init__(self, name, email, optional):
+    def __init__(self, name, email, optional, response):
         """
         Initializes an Attendee object.
 
@@ -28,10 +28,13 @@ class Attendee:
             name (str): The name of the attendee.
             email (str): The email address of the attendee.
             optional (bool): Whether the attendee is optional or not.
+            response (str): The response of the attendee.
+
         """
         self.name = name
         self.email = email
         self.optional = optional
+        self.response = response
 
 
 class EventEntry:
@@ -391,12 +394,12 @@ def main():
                               [--evening-hour END_HOUR] [--verbose]
 
     Arguments:
-    --api-url, -u: URL of the JCALAPI (default: http://localhost:7042)
+    --api-url, -u: URL of the JCALAPI (default: http://host.docker.internal:7042)
     --sfdc-user-id, -i: Salesforce ID of the user (required)
     --last-week: Export events from last week (takes precedence over --start and --end)
     --last-month: Export events from last month (takes precedence over --start and --end)
     --start: Start date in format YYYY-MM-DD
-    --end: End date in format YYYY-MM-DD
+    --end: End date in format YYYY-MM-DD (default: today's date)
     --export-all, -a: Export all events from Exchange including events without SFDC Task subject
     --output, -o: Output CSV file name and path (default: sfdc_task.csv)
     --max-hours-by-day: Max hours by day (default: 10)
@@ -467,8 +470,17 @@ def main():
         action="store_true",
         help="Export events from last month. Take precendence over --start and --end.",
     )
-    parser.add_argument("--start", type=str, help="Start date in format YYYY-MM-DD.")
-    parser.add_argument("--end", type=str, help="End date in format YYYY-MM-DD.")
+    parser.add_argument(
+        "--start",
+        type=str,
+        help="Start date in format YYYY-MM-DD.",
+    )
+    parser.add_argument(
+        "--end",
+        type=str,
+        default=datetime.now().strftime("%Y-%m-%d"),
+        help="End date in format YYYY-MM-DD.",
+    )
     parser.add_argument(
         "-a",
         "--export-all",
