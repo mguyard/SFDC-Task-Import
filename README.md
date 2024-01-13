@@ -15,7 +15,7 @@
 <p>
 <p align="center">
     <a href="https://github.com/mguyard/SFDC-Task-Import/actions/workflows/lint.yaml" target="_blank">
-        <img src="[![Python Lint](https://github.com/mguyard/SFDC-Task-Import/actions/workflows/lint.yaml/badge.svg" alt="Python Lint Action">
+        <img src="https://github.com/mguyard/SFDC-Task-Import/actions/workflows/lint.yaml/badge.svg" alt="Python Lint Action">
     </a>
     <a href="https://github.com/mguyard/SFDC-Task-Import/actions/workflows/build.yaml" target="_blank">
         <img src="https://github.com/mguyard/SFDC-Task-Import/actions/workflows/build.yaml/badge.svg" alt="Container Build Action">
