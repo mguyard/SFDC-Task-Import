@@ -14,6 +14,9 @@
 	<img src="https://img.shields.io/github/languages/count/mguyard/SFDC-Task-Import?style=default&color=0080ff" alt="repo-language-count">
 <p>
 <p align="center">
+	[![container-build](https://github.com/mguyard/SFDC-Task-Import/actions/workflows/build.yaml/badge.svg)](https://github.com/mguyard/SFDC-Task-Import/actions/workflows/build.yaml)
+<p>
+<p align="center">
 	<!-- default option, no dependency badges. -->
 </p>
 <hr>
