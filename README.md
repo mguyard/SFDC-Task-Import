@@ -202,7 +202,7 @@ docker rmi ghcr.io/mguyard/import-sfdc-task:latest
 
 ---
 
-## How to tag events
+## 🏷️ How to tag events
 
 To ensure accurate and effective classification of events by the script, it is recommended to utilize Outlook categories when creating or updating events in your calendar. The script employs three types of classifications, with a specific focus on categorizing events based on their subject. There are predefined subject-based categories known to the script:
 
