@@ -14,6 +14,8 @@
 	<img src="https://img.shields.io/github/languages/count/mguyard/SFDC-Task-Import?style=default&color=0080ff" alt="repo-language-count">
 <p>
 <p align="center">
+    <img src="https://img.shields.io/github/v/release/mguyard/SFDC-Task-Import" alt="Last Release">
+    <img src="https://img.shields.io/github/release-date/mguyard/SFDC-Task-Import" alt="Last Release">
     <a href="https://github.com/mguyard/SFDC-Task-Import/actions/workflows/lint.yaml" target="_blank">
         <img src="https://github.com/mguyard/SFDC-Task-Import/actions/workflows/lint.yaml/badge.svg" alt="Python Lint Action">
     </a>
