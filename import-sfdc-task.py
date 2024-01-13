@@ -448,7 +448,7 @@ def main():
         "-u",
         "--api-url",
         type=str,
-        default="http://localhost:7042",
+        default="http://host.docker.internal:7042",
         help="URL of the JCALAPI",
     )
     parser.add_argument(

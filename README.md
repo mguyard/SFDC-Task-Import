@@ -1,12 +1,11 @@
 <p align="center">
-  <img src="https://cdn-icons-png.flaticon.com/512/6295/6295417.png" width="100" />
+  <img src="https://cdn-icons-png.flaticon.com/512/5968/5968914.png" width="100" />
 </p>
 <p align="center">
     <h1 align="center">SFDC-TASK-IMPORT</h1>
 </p>
 <p align="center">
-    <em><code>Exchange to Salesforce event exporter: Simplify data integration with a single Python script
-    </code></em>
+    <em><code>Exchange to Salesforce event exporter: Simplify data integration with a single Python script</code></em>
 </p>
 <p align="center">
 	<img src="https://img.shields.io/github/license/mguyard/SFDC-Task-Import?style=default&color=0080ff" alt="license">
@@ -145,7 +144,7 @@ ghcr.io/mguyard/import-sfdc-task:latest \
 
 | Flag (Long/Short)             | Default | Description                                                                                         | Type    | Status      |
 |-----------------------|-------------------|-----------------------------------------------------------------------------------------------------|---------|-------------|
-| `--api-url`/`-u`           | `http://localhost:7042` | URL de l'API JCALAPI                                                                               | String  | Optionnel    |
+| `--api-url`/`-u`           | `http://host.docker.internal:7042` | URL de l'API JCALAPI                                                                               | String  | Optionnel    |
 | `--sfdc-user-id`/`-i`      | -                 | Salesforce ID de l'utilisateur                                                                    | String  | Obligatoire |
 | `--last-week`         | -                 | Exporte les événements de la semaine dernière (prioritaire sur `--start` et `--end`)               | Flag    | Optionnel    |
 | `--last-month`        | -                 | Exporte les événements du mois dernier (prioritaire sur `--start` et `--end`)                      | Flag    | Optionnel    |
