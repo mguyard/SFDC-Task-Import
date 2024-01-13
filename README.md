@@ -27,6 +27,7 @@
 >   - [⚙️ Installation](#️-installation)
 >   - [🤖 Running SFDC-Task-Import](#-running-SFDC-Task-Import)
 >   - [🧩 Parameters](#-parameters)
+>   - [🔝 Upgrade Container](#-upgrade-container)
 > - [🤝 Contributing](#-contributing)
 > - [📄 License](#-license)
 
