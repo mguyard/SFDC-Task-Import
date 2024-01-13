@@ -19,24 +19,25 @@ jobs:
         with:
           fetch-depth: 0  # fetch all history so we can generate changelog
 
-      - name: Generate changelog
-        id: changelog
-        run: |
-          export PREVIOUS_TAG=$(git tag --sort=-creatordate | sed -n '2p')
-          export CURRENT_TAG=$(git describe --tags --abbrev=0)
-          echo "PREVIOUS_TAG=$PREVIOUS_TAG"
-          echo "CURRENT_TAG=$CURRENT_TAG"
-          echo "TAG_MESSAGE=$(git tag -l -n1 $CURRENT_TAG)"
-          if [ -z "$PREVIOUS_TAG" ]
-          then
-            echo -e "# $CURRENT_TAG\n\n$TAG_MESSAGE\n\n$(git log --pretty=format:"- %s" --root -- import-sfdc-task.py Dockerfile)" > changelog.txt
-          else
-            echo -e "# $CURRENT_TAG\n\n$TAG_MESSAGE\n\n$(git log --pretty=format:"- %s" $PREVIOUS_TAG..$CURRENT_TAG -- import-sfdc-task.py Dockerfile)" > changelog.txt
-          fi
-          echo ::set-output name=changelog::$(cat changelog.txt)
+      # - name: Generate changelog
+      #   id: changelog
+      #   run: |
+      #     export PREVIOUS_TAG=$(git tag --sort=-creatordate | sed -n '2p')
+      #     export CURRENT_TAG=$(git describe --tags --abbrev=0)
+      #     echo "PREVIOUS_TAG=$PREVIOUS_TAG"
+      #     echo "CURRENT_TAG=$CURRENT_TAG"
+      #     echo "TAG_MESSAGE=$(git tag -l -n1 $CURRENT_TAG)"
+      #     if [ -z "$PREVIOUS_TAG" ]
+      #     then
+      #       echo -e "# $CURRENT_TAG\n\n$TAG_MESSAGE\n\n$(git log --pretty=format:"- %s" --root -- import-sfdc-task.py Dockerfile)" > changelog.txt
+      #     else
+      #       echo -e "# $CURRENT_TAG\n\n$TAG_MESSAGE\n\n$(git log --pretty=format:"- %s" $PREVIOUS_TAG..$CURRENT_TAG -- import-sfdc-task.py Dockerfile)" > changelog.txt
+      #     fi
+      #     echo ::set-output name=changelog::$(cat changelog.txt)
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          body: ${{ steps.changelog.outputs.changelog }}
+          # body: ${{ steps.changelog.outputs.changelog }}
+          generate_release_notes: true
           token: ${{ secrets.GITHUB_TOKEN }}
