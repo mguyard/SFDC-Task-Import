@@ -134,6 +134,10 @@ docker start ExchangeAPI
 
 The main functionality of this script is encapsulated within a Docker container, providing a self-contained and reproducible environment. When you are ready to export events, you will launch this Docker container to execute the script.
 
+> [!IMPORTANT]
+>
+> During beta-test, please use mguyard/jcalapi:dev instead of pschmitt/jcalapi:latest in docker create command
+
 ### 🔎 Verifying ExchangeAPI container
 
 ExchangeAPI container need few seconds to start and collect all events.
