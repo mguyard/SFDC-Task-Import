@@ -200,6 +200,10 @@ To upgrade, before [running script](#-running-SFDC-Task-Import), please remove o
 docker rmi ghcr.io/mguyard/import-sfdc-task:latest
 ```
 
+> [!IMPORTANT]
+>
+> Remember that upgrading create a new container and all cache is lost. So if you don't use PAST_DAYS_IMPORT parameter, at launch, only events between previous monday (today if we are monday) and today are imported.
+
 ---
 
 ## 🏷️ How to tag events
