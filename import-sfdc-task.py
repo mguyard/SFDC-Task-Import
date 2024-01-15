@@ -491,7 +491,7 @@ def main():
         "-o",
         "--output",
         type=str,
-        default="sfdc_task.csv",
+        default="/export/sfdc_task.csv",
         help="Output CSV file name and path.",
     )
     parser.add_argument(

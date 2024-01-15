@@ -185,7 +185,7 @@ ghcr.io/mguyard/import-sfdc-task:latest \
 | `--start`             | -                 | Date de début au format YYYY-MM-DD (doit être utilisé avec `--end`)                                | String  | Optionnel    |
 | `--end`               | -                 | Date de fin au format YYYY-MM-DD (doit être utilisé avec `--start`)                                | String  | Optionnel    |
 | `--export-all`/`-a`        | -                 | Exporte tous les événements de Exchange, y compris ceux sans sujet SFDC Task                        | Flag    | Optionnel    |
-| `--output`/`-o`            | `sfdc_task.csv`   | Nom et chemin du fichier CSV de sortie                                                             | String  | Optionnel    |
+| `--output`/`-o`            | `/export/sfdc_task.csv`   | Nom et chemin du fichier CSV de sortie                                                             | String  | Optionnel    |
 | `--max-hours-by-day`  | `10`              | Nombre maximal d'heures autorisé par jour                                                         | Integer | Optionnel    |
 | `--morning-hour`      | `8`               | Heure de début de la journée utilisée dans le calcul de la durée                                   | Integer | Optionnel    |
 | `--evening-hour`      | `22`              | Heure de fin de la journée utilisée dans le calcul de la durée                                     | Integer | Optionnel    |
