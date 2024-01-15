@@ -219,10 +219,12 @@ To ensure accurate and effective classification of events by the script, it is r
 - **TRAVEL**
 - **VACATION**
 
-Optionally, you can enhance event classification by including custiomer or opportunity information using the following formats:
+You also need to enhance event classification by including customer or opportunity information using the following formats:
 
 - **Customer Classification:** `CU::<CustomerName>::<SalesforceCustomerID>`
 - **Opportunity Classification:** `OP::<OpportunityName>::<SalesforceOpportunityID>`
+
+It's not needed for all subject-based. Please analyze your context.
 
 ### Create Categories
 
