@@ -52,7 +52,7 @@
 
 This Python script has been developed to facilitate the export of events from Microsoft Exchange into a Salesforce-compatible CSV format. It provides an automated solution for retrieving event data from an Exchange API, validating it against a specified date range, filtering it according to defined criteria, and exporting it as a CSV file ready for import into Salesforce.
 
-> [!IMPORTANT]
+> [!NOTE]
 >
 > This project is under development and meets certain criteria specific to my company. I encourage you to take a look at this project and adapt it to your needs if necessary.
 
@@ -101,7 +101,7 @@ Ensure that the following dependencies are installed on your system :
 
 ### ⚙️ Installation
 
-> [!IMPORTANT]
+> [!NOTE]
 >
 > This script relies on the [jcalapi](https://github.com/pschmitt/jcalapi) library, which serves as a crucial component for converting Exchange calendars into an API for seamless interaction. As part of the installation process outlined below, this dependency will be automatically deployed alongside the main script.
 
@@ -151,7 +151,7 @@ Some logs like these confirm if this working :
 
 > Found naive datetime 2023-10-16 13:36:54 on field last_modified_time
 
-> [!IMPORTANT]
+> [!TIP]
 >
 > If you have some issues, you can enable debugs during container creation by adding __-e "DEBUG=True"__
 
