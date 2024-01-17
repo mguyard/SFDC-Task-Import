@@ -236,8 +236,7 @@ You also need to enhance event classification by including customer or opportuni
 
 It's not needed for all subject-based. Please analyze your context.
 
-![Outlook Categories](docs/OutlookCategories.png)
-
+![Outlook Categories](docs/OutlookCategories.png){width=300px}
 
 ### Create Categories
 
