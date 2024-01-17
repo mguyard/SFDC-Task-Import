@@ -164,6 +164,7 @@ Use the following command to run SFDC-Task-Import:
 docker run -it --rm \
 --name SFDC-Task-Export \
 -v "$(pwd)":/export \
+-e "TZ=Europe/Paris" \
 ghcr.io/mguyard/import-sfdc-task:latest [PARAMETERS]
 ```
 
@@ -173,6 +174,7 @@ Example :
 docker run -it --rm \
 --name SFDC-Task-Export \
 -v "$(pwd)":/export \
+-e "TZ=Europe/Paris" \
 ghcr.io/mguyard/import-sfdc-task:latest \
 --sfdc-user-id XXXXXXXXXXXX \
 --output /export/myexportfile.csv
