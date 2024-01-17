@@ -216,18 +216,18 @@ docker rmi ghcr.io/mguyard/import-sfdc-task:latest
 
 To ensure accurate and effective classification of events by the script, it is recommended to utilize Outlook categories when creating or updating events in your calendar. The script employs three types of classifications, with a specific focus on categorizing events based on their subject. There are predefined subject-based categories known to the script:
 
-- **BACK OFFICE TASKS**
-- **COMPANY/TEAM MEETINGS**
-- **HighspotActivity**
-- **LEARNING ACTIVITY**
-- **OTHER PRE SALES (OPPORTUNITY RELATED)**
-- **PARTNER ENGAGEMENT**
-- **PIPELINE GENERATION ACTIVITY**
-- **POST SALES ASSISTANCE**
-- **PRE SALES ONSITE**
-- **SME SUPPORT**
-- **TRAVEL**
-- **VACATION**
+- **SU::BACK OFFICE TASKS**
+- **SU::COMPANY/TEAM MEETINGS**
+- **SU::HighspotActivity**
+- **SU::LEARNING ACTIVITY**
+- **SU::OTHER PRE SALES (OPPORTUNITY RELATED)**
+- **SU::PARTNER ENGAGEMENT**
+- **SU::PIPELINE GENERATION ACTIVITY**
+- **SU::POST SALES ASSISTANCE**
+- **SU::PRE SALES ONSITE**
+- **SU::SME SUPPORT**
+- **SU::TRAVEL**
+- **SU::VACATION**
 
 You also need to enhance event classification by including customer or opportunity information using the following formats:
 
@@ -235,6 +235,9 @@ You also need to enhance event classification by including customer or opportuni
 - **Opportunity Classification:** `OP::<OpportunityName>::<SalesforceOpportunityID>`
 
 It's not needed for all subject-based. Please analyze your context.
+
+![Outlook Categories](docs/OutlookCategories.png)
+
 
 ### Create Categories
 
