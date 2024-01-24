@@ -110,7 +110,7 @@ docker create \
 --name ExchangeAPI --restart unless-stopped \
 -p 7042:7042 \
 -e "EXCHANGE_EMAIL=<MyExchageEmailHere>" \
--e "EXCHANGE_USERNAME=<MyExchageUsernameHere>" \
+-e "EXCHANGE_USERNAME=<MyExchageEmailHere>" \
 -e "EXCHANGE_PASSWORD=<MyExchangePasswordHere>" \
 -e "TZ=Europe/Paris" \
 pschmitt/jcalapi:latest
@@ -124,7 +124,7 @@ docker create \
 --name ExchangeAPI --restart unless-stopped \
 -p 7042:7042 \
 -e "EXCHANGE_EMAIL=<MyExchageEmailHere>" \
--e "EXCHANGE_USERNAME=<MyExchageUsernameHere>" \
+-e "EXCHANGE_USERNAME=<MyExchageEmailHere>" \
 -e "EXCHANGE_PASSWORD=<MyExchangePasswordHere>" \
 -e "PAST_DAYS_IMPORT=15" \
 -e "TZ=Europe/Paris" \
