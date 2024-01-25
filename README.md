@@ -118,6 +118,7 @@ docker start ExchangeAPI
 ```
 
 You can also add another environment variable named PAST_DAYS_IMPORT who can include an integer which is the number of days in past to include by default.
+Without this, on first launch, it will only include events starting today without history
 
 ```sh
 docker create \
