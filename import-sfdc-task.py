@@ -157,13 +157,18 @@ class EventEntry:
 
             total_hours = 0
             while start.date() <= end.date():
-                day_end = min(end, start.replace(hour=evening_hour, minute=0))
-                hours_this_day = (day_end - start).seconds / 3600
-                total_hours += min(hours_this_day, max_hours_by_day)
+                if start.weekday() < 5:  # Exclude weekends (Monday = 0, Sunday = 6)
+                    day_end = min(end, start.replace(hour=evening_hour, minute=0))
+                    hours_this_day = (day_end - start).seconds / 3600
+                    total_hours += min(hours_this_day, max_hours_by_day)
+                    logging.debug(
+                        f"Event {self.summary} for day {start.date()} with counting {total_hours} hours"  # noqa: E501
+                    )
+                else:
+                    logging.debug(
+                        f"Event {self.summary} for day {start.date()} is on weekend - EXCLUDED"
+                    )
                 start = (start + timedelta(days=1)).replace(hour=morning_hour, minute=0)
-                logging.debug(
-                    f"Event {self.summary} for day {start.date()} with counting {total_hours} hours"  # noqa: E501
-                )
             return math.ceil(total_hours)
         else:
             return None
