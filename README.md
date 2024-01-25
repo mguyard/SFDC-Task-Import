@@ -144,7 +144,7 @@ ExchangeAPI container need few seconds to start and collect all events.
 To verify if all is working, please execute this command :
 
 ```sh
-docker container logs ExchangeAPIDev
+docker container logs ExchangeAPI
 ``````
 
 Some logs like these confirm if this working :
@@ -184,18 +184,18 @@ ghcr.io/mguyard/import-sfdc-task:latest \
 
 | Flag (Long/Short)             | Default | Description                                                                                         | Type    | Status      |
 |-----------------------|-------------------|-----------------------------------------------------------------------------------------------------|---------|-------------|
-| `--api-url`/`-u`           | `http://host.docker.internal:7042` | URL de l'API JCALAPI                                                                               | String  | Optionnel    |
-| `--sfdc-user-id`/`-i`      | -                 | Salesforce ID de l'utilisateur                                                                    | String  | Obligatoire |
-| `--last-week`         | -                 | Exporte les événements de la semaine dernière (prioritaire sur `--start` et `--end`)               | Flag    | Optionnel    |
-| `--last-month`        | -                 | Exporte les événements du mois dernier (prioritaire sur `--start` et `--end`)                      | Flag    | Optionnel    |
-| `--start`             | -                 | Date de début au format YYYY-MM-DD (doit être utilisé avec `--end`)                                | String  | Optionnel    |
-| `--end`               | -                 | Date de fin au format YYYY-MM-DD (doit être utilisé avec `--start`)                                | String  | Optionnel    |
-| `--export-all`/`-a`        | -                 | Exporte tous les événements de Exchange, y compris ceux sans sujet SFDC Task                        | Flag    | Optionnel    |
-| `--output`/`-o`            | `/export/sfdc_task.csv`   | Nom et chemin du fichier CSV de sortie                                                             | String  | Optionnel    |
-| `--max-hours-by-day`  | `10`              | Nombre maximal d'heures autorisé par jour                                                         | Integer | Optionnel    |
-| `--morning-hour`      | `8`               | Heure de début de la journée utilisée dans le calcul de la durée                                   | Integer | Optionnel    |
-| `--evening-hour`      | `22`              | Heure de fin de la journée utilisée dans le calcul de la durée                                     | Integer | Optionnel    |
-| `--verbose`/`-v`           | -                 | Mode verbeux (affiche des informations détaillées pendant l'exécution)                             | Flag    | Optionnel    |
+| `--api-url`/`-u`           | `http://host.docker.internal:7042` | URL and port of the JCALAPI Container API                                                                               | String  | Optional    |
+| `--sfdc-user-id`/`-i`      | -                 | Salesforce user ID                                                                    | String  | Required |
+| `--last-week`         | -                 | Export events from last week (overrides `--start` and `--end`)               | Flag    | Optional    |
+| `--last-month`        | -                 | Export events from last month (overrides `--start` and `--end`)                      | Flag    | Optional    |
+| `--start`             | -                 | Start date in YYYY-MM-DD format (must be used with `--end`)                                | String  | Optional    |
+| `--end`               | -                 | End date in YYYY-MM-DD format (must be used with `--start`)                                | String  | Optional    |
+| `--export-all`/`-a`        | -                 | Export all events from Exchange, including those without SFDC Task subject                        | Flag    | Optional    |
+| `--output`/`-o`            | `/export/sfdc_task.csv`   | Output CSV file name and path                                                             | String  | Optional    |
+| `--max-hours-by-day`  | `10`              | Maximum number of hours allowed per day                                                         | Integer | Optional    |
+| `--morning-hour`      | `8`               | Start hour of the day used in duration calculation                                   | Integer | Optional    |
+| `--evening-hour`      | `22`              | End hour of the day used in duration calculation                                     | Integer | Optional    |
+| `--verbose`/`-v`           | -                 | Verbose mode (displays detailed information during execution)                             | Flag    | Optional    |
 
 
 ### 🔝 Upgrade Container
