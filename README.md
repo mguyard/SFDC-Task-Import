@@ -197,6 +197,10 @@ ghcr.io/mguyard/import-sfdc-task:latest \
 | `--evening-hour`      | `22`              | End hour of the day used in duration calculation                                     | Integer | Optional    |
 | `--verbose`/`-v`           | -                 | Verbose mode (displays detailed information during execution)                             | Flag    | Optional    |
 
+> [!TIP]
+>
+> To find your Salesforce user ID, you can go to the settings of your profile and navigate to "Advanced User Details". In the "Application" section, you will find a field called User ID (18 characters).
+
 
 ### 🔝 Upgrade Container
 
