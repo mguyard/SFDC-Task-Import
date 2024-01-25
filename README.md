@@ -35,7 +35,7 @@
 > - [📂 Repository Structure](#-repository-structure)
 > - [🚀 Getting Started](#-getting-started)
 >   - [⚙️ Installation](#️-installation)
->   - [🔎 Verifying ExchangeAPI Container](#️-verifying-exchangeapi-container)
+>   - [🔎 Verifying ExchangeAPI Container](#-verifying-exchangeapi-container)
 >   - [🤖 Running SFDC-Task-Import](#-running-SFDC-Task-Import)
 >   - [🧩 Parameters](#-parameters)
 >   - [🔝 Upgrade Container](#-upgrade-container)
