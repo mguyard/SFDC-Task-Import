@@ -204,7 +204,7 @@ ghcr.io/mguyard/import-sfdc-task:latest \
 > You can simplify the use of this command by using aliases that include your default settings. In MacOSX, you can easy doing this by adding this in `~/.zshrc`
 
 ```sh
-alias sfdc-export='docker run -it --rm --name SFDC-Task-Export -v ~/Downloads/:/export ghcr.io/mguyard/import-sfdc-task:latest --sfdc-user-id XXXXXXXXXXXX
+alias sfdc-export='docker run -it --rm --name SFDC-Task-Export -v ~/Downloads/:/export ghcr.io/mguyard/import-sfdc-task:latest --sfdc-user-id XXXXXXXXXXXX'
 ```
 
 > [!NOTE] 
