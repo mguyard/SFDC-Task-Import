@@ -200,9 +200,14 @@ ghcr.io/mguyard/import-sfdc-task:latest \
 > [!TIP]
 >
 > To find your Salesforce user ID, you can go to the settings of your profile and navigate to "Advanced User Details". In the "Application" section, you will find a field called User ID (18 characters).
+> 
+> You can simplify the use of this command by using aliases that include your default settings. In MacOSX, you can easy doing this by adding this in `~/.zshrc`
+> `alias sfdc-export='docker run -it --rm --name SFDC-Task-Export -v ~/Downloads/:/export ghcr.io/mguyard/import-sfdc-task:latest --sfdc-user-id XXXXXXXXXXXX`
 
 > [!NOTE] 
 > Only --sfdc-user-id is required. If no other parameters are defined, export will be on the actual day only. If you need an export on different dates, please use `--start` and `--end` or one of `--last-week` `--last-month`
+> 
+> Weekends are automatically excluded. If needed, please use `--export-all`
 
 ### 🔝 Upgrade Container
 
