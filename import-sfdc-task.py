@@ -10,6 +10,7 @@ Author: GUYARD Marc - mguyard@fortinet.com
 
 import argparse
 import logging
+import os
 from datetime import datetime, timedelta
 import math
 import csv
@@ -398,13 +399,13 @@ def main():
     --sfdc-user-id, -i: Salesforce ID of the user (required)
     --last-week: Export events from last week (takes precedence over --start and --end)
     --last-month: Export events from last month (takes precedence over --start and --end)
-    --start: Start date in format YYYY-MM-DD
+    --start: Start date in format YYYY-MM-DD (default: today's date)
     --end: End date in format YYYY-MM-DD (default: today's date)
     --export-all, -a: Export all events from Exchange including events without SFDC Task subject
     --output, -o: Output CSV file name and path (default: sfdc_task.csv)
-    --max-hours-by-day: Max hours by day (default: 10)
+    --max-hours-by-day: Max hours by day (default: 8)
     --morning-hour: Start hour of day used in duration calculation (default: 8)
-    --evening-hour: End hour of day used in duration calculation (default: 22)
+    --evening-hour: End hour of day used in duration calculation (default: 19)
     --verbose, -v: Verbose mode
 
     """
@@ -451,14 +452,14 @@ def main():
         "--api-url",
         type=str,
         default="http://host.docker.internal:7042",
-        help="URL of the JCALAPI",
+        help="URL and port of the JCALAPI Container API",
     )
     parser.add_argument(
         "-i",
         "--sfdc-user-id",
         type=str,
         required=True,
-        help="Salesforce ID of the user",
+        help="Salesforce user ID",
     )
     parser.add_argument(
         "--last-week",
@@ -471,11 +472,14 @@ def main():
         help="Export events from last month. Take precendence over --start and --end.",
     )
     parser.add_argument(
+        "-s",
         "--start",
         type=str,
+        default=datetime.now().strftime("%Y-%m-%d"),
         help="Start date in format YYYY-MM-DD.",
     )
     parser.add_argument(
+        "-e",
         "--end",
         type=str,
         default=datetime.now().strftime("%Y-%m-%d"),
@@ -495,7 +499,7 @@ def main():
         help="Output CSV file name and path.",
     )
     parser.add_argument(
-        "--max-hours-by-day", type=int, default=10, help="Max hours by day"
+        "--max-hours-by-day", type=int, default=8, help="Max hours by day"
     )
     parser.add_argument(
         "--morning-hour",
@@ -506,7 +510,7 @@ def main():
     parser.add_argument(
         "--evening-hour",
         type=int,
-        default=22,
+        default=19,
         help="End hour of day used in duration calculation",
     )
     parser.add_argument(
@@ -515,6 +519,7 @@ def main():
 
     args = parser.parse_args()
 
+    # Set logging level
     if args.verbose:
         logging.basicConfig(
             level=logging.DEBUG, style="{", format="{levelname:8} {message}"
@@ -524,6 +529,19 @@ def main():
             level=logging.INFO, style="{", format="{levelname:8} {message}"
         )
 
+    # Validate output file path, permissions and extension
+    if not os.path.exists(os.path.dirname(os.path.abspath(args.output))):
+        parser.error(
+            f"The file path '{os.path.dirname(os.path.abspath(args.output))}' does not exist to store {args.output} file."  # noqa: E501
+        )
+    if not os.access(os.path.dirname(os.path.abspath(args.output)), os.W_OK):
+        parser.error(
+            f"The file path '{os.path.dirname(os.path.abspath(args.output))}' is not writable to store {args.output} file."  # noqa: E501
+        )
+    if not args.output.endswith(".csv"):
+        parser.error(f"The file extension of {args.output} must be .csv")
+
+    # Validate date range
     if args.last_week:
         start_date, end_date = last_week()
     elif args.last_month:
@@ -548,6 +566,7 @@ def main():
         start_date, end_date = current_week()
 
     logging.info("Start date: %s, End date: %s", start_date, end_date)
+    # Fetch events from Exchange API
     events = fetch_data(args.api_url + "/events")
     if events is not None:
         valid_events = validate_events_timing(events, start_date, end_date)
@@ -568,6 +587,7 @@ def main():
                 if not args.export_all
                 else matching_events
             )
+            # Write events to CSV file
             write_events_to_csv(
                 args.sfdc_user_id, filtered_events, args.output, args.max_hours_by_day
             )

@@ -188,19 +188,21 @@ ghcr.io/mguyard/import-sfdc-task:latest \
 | `--sfdc-user-id`/`-i`      | -                 | Salesforce user ID                                                                    | String  | Required |
 | `--last-week`         | -                 | Export events from last week (overrides `--start` and `--end`)               | Flag    | Optional    |
 | `--last-month`        | -                 | Export events from last month (overrides `--start` and `--end`)                      | Flag    | Optional    |
-| `--start`             | -                 | Start date in YYYY-MM-DD format (must be used with `--end`)                                | String  | Optional    |
-| `--end`               | -                 | End date in YYYY-MM-DD format (must be used with `--start`)                                | String  | Optional    |
+| `--start`/`-s`             | `today date`                 | Start date in YYYY-MM-DD format (must be used with `--end`)                                | String  | Optional    |
+| `--end`/`-e`               | `today date`                 | End date in YYYY-MM-DD format (must be used with `--start`)                                | String  | Optional    |
 | `--export-all`/`-a`        | -                 | Export all events from Exchange, including those without SFDC Task subject                        | Flag    | Optional    |
 | `--output`/`-o`            | `/export/sfdc_task.csv`   | Output CSV file name and path                                                             | String  | Optional    |
-| `--max-hours-by-day`  | `10`              | Maximum number of hours allowed per day                                                         | Integer | Optional    |
+| `--max-hours-by-day`  | `8`              | Maximum number of hours allowed per day                                                         | Integer | Optional    |
 | `--morning-hour`      | `8`               | Start hour of the day used in duration calculation                                   | Integer | Optional    |
-| `--evening-hour`      | `22`              | End hour of the day used in duration calculation                                     | Integer | Optional    |
+| `--evening-hour`      | `19`              | End hour of the day used in duration calculation                                     | Integer | Optional    |
 | `--verbose`/`-v`           | -                 | Verbose mode (displays detailed information during execution)                             | Flag    | Optional    |
 
 > [!TIP]
 >
 > To find your Salesforce user ID, you can go to the settings of your profile and navigate to "Advanced User Details". In the "Application" section, you will find a field called User ID (18 characters).
 
+> [!NOTE] 
+> Only --sfdc-user-id is required. If no other parameters are defined, export will be on the actual day only. If you need an export on different dates, please use `--start` and `--end` or one of `--last-week` `--last-month`
 
 ### 🔝 Upgrade Container
 
