@@ -119,7 +119,7 @@ docker start ExchangeAPI
 ```
 
 You can also add another environment variable named PAST_DAYS_IMPORT who can include an integer which is the number of days in past to include by default.
-__Without this, on first launch, it will only include events starting today without history__
+__Without this, on first launch, it will only include events starting in the previous monday (or today if we are monday)__
 
 ```sh
 docker create \
@@ -169,6 +169,11 @@ docker run -it --rm \
 -e "TZ=Europe/Paris" \
 ghcr.io/mguyard/import-sfdc-task:latest [PARAMETERS]
 ```
+
+> [!NOTE]
+> You can also replace `$(pwd)` by a absolute path where the output file will be store
+> 
+> __For Windows User :__ Please replace `$(pwd)` by `%cd%`
 
 Example :
 
@@ -306,6 +311,7 @@ To seamlessly import the generated CSV file into Salesforce, we recommend utiliz
     - Choose "Insert" as Operation and "Task" as Object
     - Upload CSV file
     - Ensure that the mapping aligns with Salesforce object fields to guarantee accurate data import (only comment isn't mapped - it's only for CSV review).
+    - In last step (RUN), please modify "Date format" in "Advanced" section by choosing YYYY-MM-DD 
 
 6. **Run the Data Import Job:**
     - Click on "Save & Run" button, monitoring the progress and addressing any potential errors or warnings.
