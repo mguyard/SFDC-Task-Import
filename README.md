@@ -39,6 +39,7 @@
 >   - [🤖 Running SFDC-Task-Import](#-running-SFDC-Task-Import)
 >   - [🧩 Parameters](#-parameters)
 >   - [🔝 Upgrade Container](#-upgrade-container)
+>   - [#️⃣ Identify which version is used](#-identify-which-version-is-used)
 > - [🏷️ How to tag events](#%EF%B8%8F-how-to-tag-events)
 > - [⤵ Import CSV to Salesforce](#-import-csv-to-salesforce)
 > - [🤝 Contributing](#-contributing)
@@ -224,6 +225,17 @@ docker rmi ghcr.io/mguyard/import-sfdc-task:latest
 > [!IMPORTANT]
 >
 > Remember that upgrading create a new container and all cache is lost. So if you don't use PAST_DAYS_IMPORT parameter, at launch, only events between previous monday (today if we are monday) and today are imported.
+
+
+### #️⃣ Identify which version is used
+
+On you docker host, run this command 
+
+```sh
+docker image inspect --format='{{json .Config.Labels}}' ghcr.io/mguyard/import-sfdc-task
+```
+
+You will have a JSON output including a `org.opencontainers.image.version` with actual version of your docker image
 
 ---
 
