@@ -200,22 +200,24 @@ ghcr.io/mguyard/import-sfdc-task:latest \
 |-----------------------|-------------------|-----------------------------------------------------------------------------------------------------|---------|-------------|
 | `--api-url`/`-u`           | `http://host.docker.internal:7042` | URL and port of the JCALAPI Container API                                                                               | String  | Optional    |
 | `--sfdc-user-id`/`-i`      | -                 | Salesforce user ID                                                                    | String  | Required |
+| `--this-week`         | -                 | Export events from this week (overrides `--start` and `--end`)               | Flag    | Optional    |
 | `--last-week`         | -                 | Export events from last week (overrides `--start` and `--end`)               | Flag    | Optional    |
 | `--last-month`        | -                 | Export events from last month (overrides `--start` and `--end`)                      | Flag    | Optional    |
 | `--start`/`-s`             | `today date`                 | Start date in YYYY-MM-DD format (must be used with `--end`)                                | String  | Optional    |
 | `--end`/`-e`               | `today date`                 | End date in YYYY-MM-DD format (must be used with `--start`)                                | String  | Optional    |
-| `--export-all`/`-a`        | -                 | Export all events from Exchange, including those without SFDC Task subject                        | Flag    | Optional    |
-| `--output`/`-o`            | `/export/sfdc_task.csv`   | Output CSV file name and path                                                             | String  | Optional    |
 | `--max-hours-by-day`  | `8`              | Maximum number of hours allowed per day                                                         | Integer | Optional    |
 | `--morning-hour`      | `8`               | Start hour of the day used in duration calculation                                   | Integer | Optional    |
 | `--evening-hour`      | `19`              | End hour of the day used in duration calculation                                     | Integer | Optional    |
+| `--output`/`-o`            | `/export/sfdc_task.csv`   | Output CSV file name and path                                                             | String  | Optional    |
+| `--export-all`/`-a`        | -                 | Export all events from Exchange, including those without SFDC Task subject                        | Flag    | Optional    |
 | `--verbose`/`-v`           | -                 | Verbose mode (displays detailed information during execution)                             | Flag    | Optional    |
 
 > [!TIP]
 >
 > To find your Salesforce user ID, you can go to the settings of your profile and navigate to "Advanced User Details". In the "Application" section, you will find a field called User ID (18 characters).
 > 
-> You can simplify the use of this command by using aliases that include your default settings. In MacOSX, you can easy doing this by adding this in `~/.zshrc`
+> You can simplify the use of this command by using aliases that include your default settings.
+> <img src="https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=macos&logoColor=F0F0F0" alt="MacOSX" width="10%">    In MacOSX, you can easy doing this by adding this in `~/.zshrc`
 
 ```sh
 alias sfdc-export='docker run -it --rm --name SFDC-Task-Export -v ~/Downloads/:/export ghcr.io/mguyard/import-sfdc-task:latest --sfdc-user-id XXXXXXXXXXXX'

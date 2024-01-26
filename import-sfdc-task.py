@@ -394,26 +394,36 @@ def main():
 
     Usage:
     python import-sfdc-task.py [--api-url API_URL] [--sfdc-user-id USER_ID]
-                              [--last-week] [--last-month] [--start START_DATE]
-                              [--end END_DATE] [--export-all] [--output OUTPUT_FILE]
+                              [--this-week] [--last-week] [--last-month]
+                              [--start START_DATE] [--end END_DATE]
                               [--max-hours-by-day MAX_HOURS] [--morning-hour START_HOUR]
-                              [--evening-hour END_HOUR] [--verbose]
+                              [--evening-hour END_HOUR] [--output OUTPUT_FILE]
+                              [--export-all] [--verbose]
 
     Arguments:
     --api-url, -u: URL of the JCALAPI (default: http://host.docker.internal:7042)
     --sfdc-user-id, -i: Salesforce ID of the user (required)
+    --this-week: Export events from this week (takes precedence over --start and --end)
     --last-week: Export events from last week (takes precedence over --start and --end)
     --last-month: Export events from last month (takes precedence over --start and --end)
     --start: Start date in format YYYY-MM-DD (default: today's date)
     --end: End date in format YYYY-MM-DD (default: today's date)
-    --export-all, -a: Export all events from Exchange including events without SFDC Task subject
-    --output, -o: Output CSV file name and path (default: sfdc_task.csv)
     --max-hours-by-day: Max hours by day (default: 8)
     --morning-hour: Start hour of day used in duration calculation (default: 8)
     --evening-hour: End hour of day used in duration calculation (default: 19)
+    --output, -o: Output CSV file name and path (default: sfdc_task.csv)
+    --export-all, -a: Export all events from Exchange including events without SFDC Task subject
     --verbose, -v: Verbose mode
 
     """
+
+    def this_week():
+        today = datetime.now(tz=tzlocal()).replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
+        start = today - timedelta(days=today.weekday())
+        end = start + timedelta(days=6)
+        return start, end.replace(hour=23, minute=59, second=59, microsecond=0)
 
     def last_week():
         today = datetime.now(tz=tzlocal()).replace(
@@ -467,6 +477,11 @@ def main():
         help="Salesforce user ID",
     )
     parser.add_argument(
+        "--this-week",
+        action="store_true",
+        help="Export events from this week. Take precendence over --start and --end.",
+    )
+    parser.add_argument(
         "--last-week",
         action="store_true",
         help="Export events from last week. Take precendence over --start and --end.",
@@ -491,19 +506,6 @@ def main():
         help="End date in format YYYY-MM-DD.",
     )
     parser.add_argument(
-        "-a",
-        "--export-all",
-        action="store_true",
-        help="Export all events from Exchange including events without SFDC Task subject.",  # noqa: E501
-    )
-    parser.add_argument(
-        "-o",
-        "--output",
-        type=str,
-        default="/export/sfdc_task.csv",
-        help="Output CSV file name and path.",
-    )
-    parser.add_argument(
         "--max-hours-by-day", type=int, default=8, help="Max hours by day"
     )
     parser.add_argument(
@@ -517,6 +519,19 @@ def main():
         type=int,
         default=19,
         help="End hour of day used in duration calculation",
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        type=str,
+        default="/export/sfdc_task.csv",
+        help="Output CSV file name and path.",
+    )
+    parser.add_argument(
+        "-a",
+        "--export-all",
+        action="store_true",
+        help="Export all events from Exchange including events without SFDC Task subject.",  # noqa: E501
     )
     parser.add_argument(
         "--verbose", "-v", action="store_true", default=False, help="Verbose mode"
@@ -547,7 +562,9 @@ def main():
         parser.error(f"The file extension of {args.output} must be .csv")
 
     # Validate date range
-    if args.last_week:
+    if args.this_week:
+        start_date, end_date = this_week()
+    elif args.last_week:
         start_date, end_date = last_week()
     elif args.last_month:
         start_date, end_date = last_month()
