@@ -119,7 +119,7 @@ docker start ExchangeAPI
 ```
 
 You can also add another environment variable named PAST_DAYS_IMPORT who can include an integer which is the number of days in past to include by default.
-__Without this, on first launch, it will only include events starting in the previous monday (or today if we are monday)__
+__Otherwise, on the first launch, it will only include events starting on the previous Monday (or today, if it's Monday).__
 
 ```sh
 docker create \
@@ -171,6 +171,8 @@ ghcr.io/mguyard/import-sfdc-task:latest [PARAMETERS]
 ```
 
 > [!NOTE]
+> `-v "$(pwd)":/export` help to define where output will be store. First part `$(pwd)` define the local storage (your actual folder) and second part `/export` define the container path. From the script point of view, all need to be store in /export folder
+> 
 > You can also replace `$(pwd)` by a absolute path where the output file will be store
 > 
 > __For Windows User :__ Please replace `$(pwd)` by `%cd%`
@@ -184,7 +186,7 @@ docker run -it --rm \
 -e "TZ=Europe/Paris" \
 ghcr.io/mguyard/import-sfdc-task:latest \
 --sfdc-user-id XXXXXXXXXXXX \
---output /export/myexportfile.csv
+--last-week
 ```
 
 ### 🧩 Parameters
