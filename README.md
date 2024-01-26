@@ -180,7 +180,7 @@ ghcr.io/mguyard/import-sfdc-task:latest [PARAMETERS]
 > 
 > You can also replace `$(pwd)` by a absolute path where the output file will be store
 > 
-> __For Windows User :__ Please replace `$(pwd)` by `%cd%`
+> <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Windows" width="10%">    __For Windows User :__ Please replace `$(pwd)` by `%cd%`
 
 Example :
 
