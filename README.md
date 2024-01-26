@@ -217,6 +217,7 @@ ghcr.io/mguyard/import-sfdc-task:latest \
 > To find your Salesforce user ID, you can go to the settings of your profile and navigate to "Advanced User Details". In the "Application" section, you will find a field called User ID (18 characters).
 > 
 > You can simplify the use of this command by using aliases that include your default settings.
+> 
 > <img src="https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=macos&logoColor=F0F0F0" alt="MacOSX" width="10%">    In MacOSX, you can easy doing this by adding this in `~/.zshrc`
 
 ```sh
