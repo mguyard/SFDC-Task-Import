@@ -101,9 +101,9 @@ Ensure that the following dependencies are installed on your system :
 - **[Docker Desktop](https://www.docker.com/products/docker-desktop)**: `Minimal version 4.26.1`
 
 > [!TIP]
-> <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Windows" width="5%">    [Docker Desktop Installation Guide for Windows](https://docs.docker.com/desktop/install/windows-install/)
+> <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Windows" width="10%">    [Docker Desktop Installation Guide for Windows](https://docs.docker.com/desktop/install/windows-install/)
 > 
-> <img src="https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=macos&logoColor=F0F0F0" alt="MacOSX" width="5%">    [Docker Desktop Installation Guide for MacOSX](https://docs.docker.com/desktop/install/mac-install/)
+> <img src="https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=macos&logoColor=F0F0F0" alt="MacOSX" width="10%">    [Docker Desktop Installation Guide for MacOSX](https://docs.docker.com/desktop/install/mac-install/)
 
 ### ⚙️ Installation
 
