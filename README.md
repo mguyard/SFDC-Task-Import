@@ -218,7 +218,7 @@ ghcr.io/mguyard/import-sfdc-task:latest \
 > 
 > You can simplify the use of this command by using aliases that include your default settings.
 > 
-> In MacOSX, you can easy doing this by adding this in `~/.zshrc` or create a doskey alias on Windows.
+> In MacOSX, you can easy doing this by adding this in `~/.zshrc` or create a doskey alias on Windows like describe below :
 
 <img src="https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=macos&logoColor=F0F0F0" alt="MacOSX" width="10%">
 
