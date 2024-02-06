@@ -258,6 +258,8 @@ docker image inspect --format='{{json .Config.Labels}}' ghcr.io/mguyard/import-s
 
 You will have a JSON output including a `org.opencontainers.image.version` with actual version of your docker image
 
+Last release is : <img src="https://img.shields.io/github/v/release/mguyard/SFDC-Task-Import" alt="Last Release">
+
 ---
 
 ## 🏷️ How to tag events
