@@ -218,10 +218,16 @@ ghcr.io/mguyard/import-sfdc-task:latest \
 > 
 > You can simplify the use of this command by using aliases that include your default settings.
 > 
-> <img src="https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=macos&logoColor=F0F0F0" alt="MacOSX" width="10%">    In MacOSX, you can easy doing this by adding this in `~/.zshrc`
+> In MacOSX, you can easy doing this by adding this in `~/.zshrc` or create a doskey alias on Windows.
 
+<img src="https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=macos&logoColor=F0F0F0" alt="MacOSX" width="10%">
 ```sh
 alias sfdc-export='docker run -it --rm --name SFDC-Task-Export -v ~/Downloads/:/export ghcr.io/mguyard/import-sfdc-task:latest --sfdc-user-id XXXXXXXXXXXX'
+```
+
+<img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Windows" width="10%">
+```sh
+doskey sfdc-export='docker run -it --rm --name SFDC-Task-Export -v "%cd%"/:/export ghcr.io/mguyard/import-sfdc-task:latest --sfdc-user-id XXXXXXXXXXXX'
 ```
 
 > [!NOTE] 
