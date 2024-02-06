@@ -166,7 +166,7 @@ class EventEntry:
                     )
                 else:
                     logging.debug(
-                        f"Event {self.summary} for day {start.date()} is on weekend - EXCLUDED"
+                        f"EXCLUDED - Event {self.summary} for day {start.date()} is on weekend"
                     )
                 start = (start + timedelta(days=1)).replace(hour=morning_hour, minute=0)
             return math.ceil(total_hours)
