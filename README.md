@@ -109,22 +109,7 @@ Ensure that the following dependencies are installed on your system :
 
 > [!NOTE]
 >
-> This script relies on the [jcalapi](https://github.com/pschmitt/jcalapi) library, which serves as a crucial component for converting Exchange calendars into an API for seamless interaction. As part of the installation process outlined below, this dependency will be automatically deployed alongside the main script.
-
-```sh
-docker create \
---name ExchangeAPI --restart unless-stopped \
--p 7042:7042 \
--e "EXCHANGE_EMAIL=<MyExchageEmailHere>" \
--e "EXCHANGE_USERNAME=<MyExchageEmailHere>" \
--e "EXCHANGE_PASSWORD=<MyExchangePasswordHere>" \
--e "TZ=Europe/Paris" \
-pschmitt/jcalapi:latest
-docker start ExchangeAPI
-```
-
-You can also add another environment variable named PAST_DAYS_IMPORT who can include an integer which is the number of days in past to include by default.
-__Otherwise, on the first launch, it will only include events starting on the previous Monday (or today, if it's Monday).__
+> This script relies on the [jcalapi](https://github.com/pschmitt/jcalapi) library, which serves as a crucial component for converting Exchange calendars into an API for seamless interaction. As part of the installation process outlined below, this dependency will be automatically deployed in container.
 
 ```sh
 docker create \
@@ -139,11 +124,7 @@ pschmitt/jcalapi:latest
 docker start ExchangeAPI
 ```
 
-The main functionality of this script is encapsulated within a Docker container, providing a self-contained and reproducible environment. When you are ready to export events, you will launch this Docker container to execute the script.
-
-> [!IMPORTANT]
->
-> During beta-test, please use mguyard/jcalapi:dev instead of pschmitt/jcalapi:latest in docker create command
+The main functionality of this script is encapsulated within a Docker container, providing a self-contained and reproducible environment. This container will run in background and refresh data automaticly to conserve data in cache. Until you manually stop container, it will restart with Docker (including when you restart your laptop)
 
 ### 🔎 Verifying ExchangeAPI container
 
@@ -237,17 +218,22 @@ doskey sfdc-export='docker run -it --rm --name SFDC-Task-Export -v "%cd%"/:/expo
 > 
 > Weekends are automatically excluded. If needed, please use `--export-all`
 
-### 🔝 Upgrade Container
+### 🔝 Upgrade Containers
 
-To upgrade, before [running script](#-running-SFDC-Task-Import), please remove old container image
+To upgrade, before [running script](#-running-SFDC-Task-Import), please remove old containers images
 
 ```sh
 docker rmi ghcr.io/mguyard/import-sfdc-task:latest
 ```
 
+Until communicated, you will not need to upgrade JCALAPI container. To do this if need or require :
+```sh
+docker rmi pschmitt/jcalapi:latest
+```
+
 > [!IMPORTANT]
 >
-> Remember that upgrading create a new container and all cache is lost. So if you don't use PAST_DAYS_IMPORT parameter, at launch, only events between previous monday (today if we are monday) and today are imported.
+> Remember that upgrading JCALAPI create a new container and all cache will be lost. So if you don't use PAST_DAYS_IMPORT parameter, at [launch](#️-installation), only events between previous monday (today if we are monday) and today are imported.
 
 
 ### #️⃣ Identify which version is used
