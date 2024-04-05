@@ -119,10 +119,14 @@ docker create \
 -e "EXCHANGE_USERNAME=<MyExchageEmailHere>" \
 -e "EXCHANGE_PASSWORD=<MyExchangePasswordHere>" \
 -e "PAST_DAYS_IMPORT=15" \
--e "TZ=Europe/Paris" \
+-e "TZ=UTC" \
 pschmitt/jcalapi:latest
 docker start ExchangeAPI
 ```
+
+> [!IMPORTANT]
+>
+> Don't change TZ environment variable. CEST (french summer time) seems to block application.
 
 The main functionality of this script is encapsulated within a Docker container, providing a self-contained and reproducible environment. This container will run in background and refresh data automaticly to conserve data in cache. Until you manually stop container, it will restart with Docker (including when you restart your laptop)
 
@@ -139,9 +143,11 @@ Some logs like these confirm if this working :
 
 > Found naive datetime 2023-10-16 13:36:54 on field last_modified_time
 
+You can also verify last update time with [this link](http://localhost:7042/meta)
+
 > [!TIP]
 >
-> If you have some issues, you can enable debugs during container creation by adding __-e "DEBUG=True"__
+> If you have some issues, you can enable debugs during container creation by adding __-e "DEBUG=True" -e "LOG_LEVEL=DEBUG"__
 
 
 ### 🤖 Running SFDC-Task-Import
